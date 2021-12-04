@@ -14,3 +14,20 @@
 - create roles(LOADER, TRANSFORMER, REPORTER)
 - create dbt user
 - grant roles
+
+## Manual deploy method
+
+- Clone this repo
+- Initialize the terraform project
+
+      terraform init
+
+- Create the secret.tfvars based on the empty_secret.tfvars file
+        
+- plan
+
+        terraform plan -var-file secret.tfvars
+
+- apply
+
+        terraform apply -var-file secret.tfvars
