@@ -68,5 +68,5 @@ variable "roles" {
 
 variable "databases" {
   type    = list(string)
-  default = ["ANALYTICS, ANALYTICS_STAGE"]
+  default = ["ANALYTICS_TEST", "ANALYTICS_STAGE_TEST"]
 }

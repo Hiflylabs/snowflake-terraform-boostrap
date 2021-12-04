@@ -58,17 +58,23 @@ resource "snowflake_warehouse" "warehouses" {
 
 # Grant roles to dbt technical user
 resource snowflake_role_grants grant_loader {
-  provider  = snowflake.security_admin
-  for_each = var.roles
-  role_name = each.value.name
-  users = [
-    snowflake_user.user.name
-  ]
-  depends_on = [snowflake_role.roles]
+  provider    = snowflake.security_admin
+  for_each    = var.roles
+  role_name   = each.value.name
+  users       = [snowflake_user.user.name]
+  depends_on  = [snowflake_role.roles]
 }
 # Create databases
 resource "snowflake_database" "db" {
   for_each = toset(var.databases)
   provider = snowflake.sys_admin
-  name     = upper(each.value)
+  name     = upper(each.key)
+}
+
+# Grant roles to databases
+resource snowflake_database_grant grant {
+  for_each      = toset(var.databases)
+  provider      = snowflake.sys_admin
+  database_name = upper(each.key)
+  roles         = [for k, v in var.roles : v.name ]
 }
