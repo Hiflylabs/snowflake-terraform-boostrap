@@ -9,7 +9,7 @@
 
 
 ### Steps
-- create warehouse(LOADING, TRANSFORMING)
+- create warehouses(LOADING, TRANSFORMING)
 - create databases(ANALYTICS, ANALYTICS_STAGE)
 - create roles(LOADER, TRANSFORMER, REPORTER)
 - create dbt user
