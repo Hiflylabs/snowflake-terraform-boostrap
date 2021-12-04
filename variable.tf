@@ -20,17 +20,13 @@ variable "warehouses" {
         name = string,
         size = string
     }))
-    default ={
+    default = {
         "loading" = {
-            name = "loading",
+            name = "TF_LOADING",
             size = "xsmall"
         }
         "transforming" = {
-            name = "transforming",
-            size = "xsmall"
-        }
-        "reporting" = {
-            name = "reporting",
+            name = "TF_TRANSFORMING",
             size = "xsmall"
         }
     } 
@@ -41,17 +37,17 @@ variable "roles" {
         name = string,
         comment = string
     }))
-    default ={
+    default = {
         "loader" = {
-            name = "loader2",
+            name = "tf_loader",
             comment = "Loader is responsible for loading raw data to Snowflake."
         }
         "transformer" = {
-            name = "transformer",
+            name = "tf_transformer",
             comment = "Transformer is responsible for transforming raw data into ready-for-analysis datasets."
         }
         "reporter" = {
-            name = "reporter",
+            name = "tf_reporter",
             comment = "Reporter is responsible for reading data by end-users as well as business intelligence service users."
         }
     } 
