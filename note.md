@@ -6,7 +6,11 @@
 A user with sys_admin, security_admin roles
 
 
+<img src="./misc/SF_TF.svg">
+
+
 ### Steps
 - create warehouse
-- create db
+- create databases
 - create roles
+- create dbt user

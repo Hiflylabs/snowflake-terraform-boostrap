@@ -29,16 +29,19 @@ variable sf_dbt_user_password {
 variable "warehouses" {
     type = map(object({
         name = string,
-        size = string
+        size = string,
+        role = string,
     }))
     default = {
         "loading" = {
             name = "TF_LOADING",
-            size = "xsmall"
+            size = "xsmall",
+            role = "tf_loader"
         }
         "transforming" = {
             name = "TF_TRANSFORMING",
-            size = "xsmall"
+            size = "xsmall",
+            role = "tf_transformer"
         }
     } 
 }
