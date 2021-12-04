@@ -15,6 +15,17 @@ variable sf_tf_user_password {
     type = string
     sensitive = true
 }
+
+variable sf_dbt_user_name {
+    type = string
+    sensitive = true
+    default = "dbt2"
+}
+variable sf_dbt_user_password {
+    type = string
+    sensitive = true
+}
+
 variable "warehouses" {
     type = map(object({
         name = string,

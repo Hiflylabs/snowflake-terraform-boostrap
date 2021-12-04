@@ -29,9 +29,9 @@ provider "snowflake" {
 resource snowflake_user user {
   provider      = snowflake.security_admin
   name         = "dbt technical user"
-  login_name   = "dbt2"
+  login_name   = var.sf_dbt_user_name
   comment      = "dbt project technical user"
-  password     = "secret"
+  password     = var.sf_dbt_user_password
   disabled     = false
   display_name = "dbt technical user"
   # depends_on   = [snowflake.security_admin]
