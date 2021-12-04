@@ -63,3 +63,10 @@ variable "roles" {
         }
     } 
 }
+
+
+
+variable "databases" {
+  type    = list(string)
+  default = ["ANALYTICS, ANALYTICS_STAGE"]
+}

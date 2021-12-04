@@ -66,3 +66,9 @@ resource snowflake_role_grants grant_loader {
   ]
   depends_on = [snowflake_role.roles]
 }
+# Create databases
+resource "snowflake_database" "db" {
+  for_each = toset(var.databases)
+  provider = snowflake.sys_admin
+  name     = upper(each.value)
+}
