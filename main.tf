@@ -26,42 +26,42 @@ provider "snowflake" {
 }
 
 # Create dbt technical user
-resource snowflake_user user {
-  provider      = snowflake.security_admin
-  name          = "dbt technical user"
-  login_name    = var.sf_dbt_user_name
-  comment       = "dbt project technical user"
-  password      = var.sf_dbt_user_password
-  disabled      = false
-  display_name  = "dbt technical user"
+resource "snowflake_user" "user" {
+  provider     = snowflake.security_admin
+  name         = "dbt technical user"
+  login_name   = var.sf_dbt_user_name
+  comment      = "dbt project technical user"
+  password     = var.sf_dbt_user_password
+  disabled     = false
+  display_name = "dbt technical user"
 }
 
 # Create roles
-resource snowflake_role roles {
-  for_each  = var.roles
-  provider  = snowflake.security_admin
-  name      = each.value["name"]
-  comment   = each.value["comment"]
+resource "snowflake_role" "roles" {
+  for_each = var.roles
+  provider = snowflake.security_admin
+  name     = each.value["name"]
+  comment  = each.value["comment"]
 }
 
 # Create warehouses
-resource snowflake_warehouse warehouses {
-  
-    for_each            = var.warehouses
-    provider            = snowflake.sys_admin
-    name                = upper(each.value.name)
-    warehouse_size      = each.value.size
-    auto_suspend        = 60
-    initially_suspended = true
+resource "snowflake_warehouse" "warehouses" {
+
+  for_each            = var.warehouses
+  provider            = snowflake.sys_admin
+  name                = upper(each.value.name)
+  warehouse_size      = each.value.size
+  auto_suspend        = 60
+  initially_suspended = true
 }
 
 # Grant roles to dbt technical user
-resource snowflake_role_grants roles {
-  provider    = snowflake.security_admin
-  for_each    = var.roles
-  role_name   = each.value.name
-  users       = [snowflake_user.user.name]
-  depends_on  = [snowflake_role.roles]
+resource "snowflake_role_grants" "roles" {
+  provider   = snowflake.security_admin
+  for_each   = var.roles
+  role_name  = each.value.name
+  users      = [snowflake_user.user.name]
+  depends_on = [snowflake_role.roles]
 }
 # Create databases
 resource "snowflake_database" "db" {
@@ -71,7 +71,7 @@ resource "snowflake_database" "db" {
 }
 
 # Grant roles to databases
-resource snowflake_database_grant grant {
+resource "snowflake_database_grant" "grant" {
   for_each      = toset(var.databases)
   provider      = snowflake.sys_admin
   database_name = upper(each.key)
@@ -80,12 +80,12 @@ resource snowflake_database_grant grant {
 }
 
 # Grant roles to warehouses
-resource snowflake_warehouse_grant grant {
-  provider       = snowflake.sys_admin
-  for_each       = var.warehouses
-  warehouse_name = upper(each.value.name)
-  privilege      = "MODIFY"
-  roles = [each.value.role]
+resource "snowflake_warehouse_grant" "grant" {
+  provider          = snowflake.sys_admin
+  for_each          = var.warehouses
+  warehouse_name    = upper(each.value.name)
+  privilege         = "MODIFY"
+  roles             = [each.value.role]
   with_grant_option = false
-  depends_on     = [snowflake_warehouse.warehouses]
+  depends_on        = [snowflake_warehouse.warehouses]
 }
