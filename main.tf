@@ -45,7 +45,7 @@ resource snowflake_role roles {
 }
 
 # Create warehouses
-resource "snowflake_warehouse" "warehouses" {
+resource snowflake_warehouse warehouses {
   
     for_each            = var.warehouses
     provider            = snowflake.sys_admin
