@@ -3,7 +3,10 @@ terraform {
     snowflake = {
       source  = "chanzuckerberg/snowflake"
       version = "0.25.28"
-    }
+    } 
+  }
+  backend "local" {
+    path = "./terraform.tfstate"
   }
 }
 
