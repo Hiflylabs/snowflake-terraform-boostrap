@@ -36,7 +36,7 @@ jobs:
     
     - name: Terraform Plan
       id: plan
-      run: terraform plan -no-color
+      run: terraform plan -no-color -out out
       continue-on-error: false
       env:
         TF_VAR_snowflake_account : ${{ secrets.SNOWFLAKE_ACCOUNT }}
@@ -45,6 +45,11 @@ jobs:
         TF_VAR_sf_tf_user_password : ${{ secrets.SF_TF_USER_PASSWORD }}
         TF_VAR_sf_dbt_user_password : ${{ secrets.SF_DBT_USER_PASSWORD }}
 
+    - uses: stefanzweifel/git-auto-commit-action@v4
+      with:
+        commit_message: "Update terraform plan"
+        commit_user_name: Github
+        
     - name: Plan output
       id: output
       uses: actions/github-script@v3
