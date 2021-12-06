@@ -47,7 +47,7 @@ jobs:
 
     - name: Terraform Apply
       id: apply
-      run: terraform apply -auto-approve
+      run: terraform apply -auto-approve -state-out=terraform.tfstate 
       env:
         TF_VAR_snowflake_account : ${{ secrets.SNOWFLAKE_ACCOUNT }}
         TF_VAR_snowflake_region : ${{ secrets.SNOWFLAKE_REGION }}
