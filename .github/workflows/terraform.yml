@@ -44,3 +44,32 @@ jobs:
         TF_VAR_sf_tf_user_name : ${{ secrets.SF_TF_USER_NAME }}
         TF_VAR_sf_tf_user_password : ${{ secrets.SF_TF_USER_PASSWORD }}
         TF_VAR_sf_dbt_user_password : ${{ secrets.SF_DBT_USER_PASSWORD }}
+
+    - name: Plan output
+      id: output
+      uses: actions/github-script@v3
+      if: github.event_name == 'pull_request'
+      env:
+        PLAN: "terraform\n${{ steps.plan.outputs.stdout }}"
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        script: |
+          const output = `#### Terraform Format and Style 🖌\`${{ steps.fmt.outcome }}\`
+          ### Workspace
+          \`${process.env.TF_WORKSPACE}\`
+          #### Terraform Initialization ⚙️\`${{ steps.init.outcome }}\`
+          #### Terraform Plan 📖\`${{ steps.plan.outcome }}\`
+          <details><summary>Show Plan</summary>
+          \`\`\`hcl
+          ${process.env.PLAN}
+          \`\`\`
+          </details>
+          **Pusher**: @${{ github.actor }}
+          **Action**: ${{ github.event_name }}
+          `;
+          github.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: output
+          })
