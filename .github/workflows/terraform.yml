@@ -1,16 +1,36 @@
-name: 'Terraform GitHub Actions'
+name: Terraform
+
 on:
-  - pull_request
-  - push
+  push:
+  pull_request:
+  workflow_dispatch:
+
 jobs:
-  terraform:
-    name: 'Terraform'
+  terraform-actions:
+    name: Workflow
     runs-on: ubuntu-latest
     steps:
-      - name: 'Terraform Format'
-        uses: hashicorp/terraform-github-actions@master
-        with:
-          tf_actions_version: 0.14.10
-          tf_actions_subcommand: 'init'
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Checkout Repository
+      uses: actions/checkout@master
+
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v1
+      with:
+        terraform_version: 0.14.6
+
+    - name: Terraform Fmt
+      id: fmt
+      run: terraform fmt -check -diff
+      continue-on-error: true
+
+    - name: Terraform Init
+      id: init
+      run: terraform init
+      continue-on-error: true
+
+    - name: Terraform Validate
+      id: validate
+      run: terraform validate -no-color
+      continue-on-error: true
+    
