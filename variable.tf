@@ -15,12 +15,13 @@ variable sf_tf_user_password {
     type = string
     sensitive = true
 }
-
+# DBT cloud user name
 variable sf_dbt_user_name {
     type = string
     sensitive = true
     default = "dbt2"
 }
+# DBT cloud user password
 variable sf_dbt_user_password {
     type = string
     sensitive = true
@@ -71,5 +72,5 @@ variable "roles" {
 
 variable "databases" {
   type    = list(string)
-  default = ["ANALYTICS_TEST", "ANALYTICS_STAGE_TEST"]
+  default = ["TF_ANALYTICS", "TF_ANALYTICS_STAGE"]
 }
