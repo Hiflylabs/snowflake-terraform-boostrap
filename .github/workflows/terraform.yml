@@ -39,8 +39,8 @@ jobs:
       run: terraform plan -no-color
       continue-on-error: false
       env:
-        TF_VAR_snowflake_account : ${{ SECRET.SNOWFLAKE_ACCOUNT }}
-        TF_VAR_snowflake_region : ${{ SECRET.SNOWFLAKE_REGION }}
-        TF_VAR_sf_tf_user_name : ${{ SECRET.SF_TF_USER_NAME }}
-        TF_VAR_sf_tf_user_password : ${{ SECRET.SF_TF_USER_PASSWORD }}
-        TF_VAR_sf_dbt_user_password : ${{ SECRET.SF_DBT_USER_PASSWORD }}
+        TF_VAR_snowflake_account : ${{ secrets.SNOWFLAKE_ACCOUNT }}
+        TF_VAR_snowflake_region : ${{ secrets.SNOWFLAKE_REGION }}
+        TF_VAR_sf_tf_user_name : ${{ secrets.SF_TF_USER_NAME }}
+        TF_VAR_sf_tf_user_password : ${{ secrets.SF_TF_USER_PASSWORD }}
+        TF_VAR_sf_dbt_user_password : ${{ secrets.SF_DBT_USER_PASSWORD }}
