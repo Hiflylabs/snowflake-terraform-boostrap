@@ -44,6 +44,11 @@ variable "warehouses" {
             size = "xsmall",
             role = "tf_transformer"
         }
+        "reporting" = {
+            name = "TF_REPORTING",
+            size = "xsmall",
+            role = "tf_reporter"
+        }
     } 
 }
 
