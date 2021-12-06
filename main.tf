@@ -76,6 +76,7 @@ resource snowflake_database_grant grant {
   provider      = snowflake.sys_admin
   database_name = upper(each.key)
   roles         = [for k, v in var.roles : v.name]
+  depends_on    = [snowflake_database.db]
 }
 
 # Grant roles to warehouses
@@ -85,6 +86,6 @@ resource snowflake_warehouse_grant grant {
   warehouse_name = upper(each.value.name)
   privilege      = "MODIFY"
   roles = [each.value.role]
-
   with_grant_option = false
+  depends_on     = [snowflake_warehouse.warehouses]
 }
