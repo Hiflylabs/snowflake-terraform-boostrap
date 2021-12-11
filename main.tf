@@ -40,7 +40,7 @@ resource "snowflake_user" "user" {
 resource "snowflake_role" "roles" {
   for_each = var.roles
   provider = snowflake.security_admin
-  name     = each.value["name"]
+  name     = upper(each.value["name"])
   comment  = each.value["comment"]
 }
 
@@ -59,7 +59,7 @@ resource "snowflake_warehouse" "warehouses" {
 resource "snowflake_role_grants" "roles" {
   provider   = snowflake.security_admin
   for_each   = var.roles
-  role_name  = each.value.name
+  role_name  = upper(each.value.name)
   users      = [snowflake_user.user.name]
   depends_on = [snowflake_role.roles]
 }
@@ -75,7 +75,7 @@ resource "snowflake_database_grant" "grant" {
   for_each      = toset(var.databases)
   provider      = snowflake.sys_admin
   database_name = upper(each.key)
-  roles         = [for k, v in var.roles : v.name]
+  roles         = [for k, v in var.roles : upper(v.name)]
   depends_on    = [snowflake_database.db]
 }
 
@@ -85,7 +85,7 @@ resource "snowflake_warehouse_grant" "grant" {
   for_each          = var.warehouses
   warehouse_name    = upper(each.value.name)
   privilege         = "MODIFY"
-  roles             = [each.value.role]
+  roles             = [upper(each.value.role)]
   with_grant_option = false
   depends_on        = [snowflake_warehouse.warehouses]
 }
