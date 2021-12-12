@@ -69,13 +69,20 @@ variable "databases" {
   default = ["TF_ANALYTICS", "TF_ANALYTICS_STAGE", "TF_ANALYTICS_DEV"]
 }
 
-variable "schema" {
-  type = object({
+variable "schemas" {
+  type = map(object({
     name    = string,
     comment = string
-  })
-  default = {
-    name    = "log",
-    comment = "Log"
+  }))
+   default = {
+    "log" = {
+      name    = "LOG",
+      comment = "Log"
+    },
+      "test" = {
+      name    = "test",
+      comment = "test"
+    }
+
   }
 }
