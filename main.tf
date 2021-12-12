@@ -90,6 +90,7 @@ resource "snowflake_warehouse_grant" "grant" {
   depends_on        = [snowflake_warehouse.warehouses]
 }
 
+# Create schema
 resource "snowflake_schema" "schema" {
   provider            = snowflake.sys_admin
   for_each            = toset(var.databases)
@@ -100,4 +101,13 @@ resource "snowflake_schema" "schema" {
   is_managed          = false
   data_retention_days = 1
   depends_on          = [snowflake_database.db]
+}
+resource "snowflake_schema_grant" "grant" {
+  provider            = snowflake.security_admin
+  for_each            = toset(var.databases)
+  database_name       = upper(each.key)
+  privilege           = "USAGE"
+  roles               = [for k, v in var.roles : upper(v.name)]
+  on_future           = true
+  depends_on          = [snowflake_schema.schema]
 }
