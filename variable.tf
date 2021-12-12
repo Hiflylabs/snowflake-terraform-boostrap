@@ -1,3 +1,4 @@
+# Information about the target Snowflake environment
 variable "snowflake_tenant_info" {
   type = object({
     account_name = string,
@@ -10,7 +11,7 @@ variable "snowflake_tenant_info" {
   sensitive = true
 }
 
-# DBT cloud user 
+# dbt cloud user 
 variable "snowflake_dbt_user_info" {
   type = object({
     user_name     = string,
@@ -18,6 +19,8 @@ variable "snowflake_dbt_user_info" {
   })
   sensitive = true
 }
+
+# Warehouses to create
 variable "warehouses" {
   type = map(object({
     name = string,
@@ -43,6 +46,7 @@ variable "warehouses" {
   }
 }
 
+// Roles to create
 variable "roles" {
   type = map(object({
     name    = string,
@@ -64,11 +68,16 @@ variable "roles" {
   }
 }
 
+# List of databases to create.
 variable "databases" {
   type    = list(string)
   default = ["TF_ANALYTICS", "TF_ANALYTICS_STAGE", "TF_ANALYTICS_DEV"]
 }
 
+/* 
+# Schemas to create.
+These schemas that not managed by dbt.
+*/
 variable "schemas" {
   type = map(object({
     name    = string,
