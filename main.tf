@@ -93,14 +93,14 @@ resource "snowflake_warehouse_grant" "grant" {
 # Create schemas
 locals {
   databases_schemas_list = flatten([
-    for database in var.databases : [ 
-      for key, value in var.schemas: {
-          "database"    = upper(database)
-          "schema_name" = upper(value.name)
-          "comment"     = value.comment
+    for database in var.databases : [
+      for key, value in var.schemas : {
+        "database"    = upper(database)
+        "schema_name" = upper(value.name)
+        "comment"     = value.comment
       }
     ]
-  ]) 
+  ])
 }
 
 # Grant roles to future schemas
@@ -116,7 +116,7 @@ resource "snowflake_schema_grant" "grant" {
 # Create schemas
 resource "snowflake_schema" "schema" {
   provider            = snowflake.sys_admin
-  for_each            = {for key, value in local.databases_schemas_list: key => value}
+  for_each            = { for key, value in local.databases_schemas_list : key => value }
   database            = upper(each.value.database)
   name                = upper(each.value.schema_name)
   comment             = each.value.comment

@@ -83,12 +83,12 @@ variable "schemas" {
     name    = string,
     comment = string
   }))
-   default = {
+  default = {
     "log" = {
       name    = "LOG",
       comment = "Log"
     },
-      "test" = {
+    "test" = {
       name    = "test",
       comment = "test"
     }
