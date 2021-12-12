@@ -46,7 +46,6 @@ resource "snowflake_role" "roles" {
 
 # Create warehouses
 resource "snowflake_warehouse" "warehouses" {
-
   for_each            = var.warehouses
   provider            = snowflake.sys_admin
   name                = upper(each.value.name)
@@ -63,6 +62,7 @@ resource "snowflake_role_grants" "roles" {
   users      = [snowflake_user.user.name]
   depends_on = [snowflake_role.roles]
 }
+
 # Create databases
 resource "snowflake_database" "db" {
   for_each = toset(var.databases)
@@ -102,6 +102,8 @@ resource "snowflake_schema" "schema" {
   data_retention_days = 1
   depends_on          = [snowflake_database.db]
 }
+
+# Grant roles to schema
 resource "snowflake_schema_grant" "grant" {
   provider      = snowflake.security_admin
   for_each      = toset(var.databases)
