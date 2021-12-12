@@ -39,7 +39,7 @@ jobs:
       run: terraform plan -no-color -out out
       continue-on-error: false
       env:
-        TF_VAR_snowflake_tenant_info : '{ account_name = ${{ secrets.SNOWFLAKE_ACCOUNT }}, region = ${{ secrets.SNOWFLAKE_REGION }}, user_name = ${{ secrets.SF_TF_USER_NAME }}, user_password = ${{ secrets.SF_TF_USER_PASSWORD }} }'
+        TF_VAR_snowflake_tenant_info : '{ account_name = "${{ secrets.SNOWFLAKE_ACCOUNT }}", region = "${{ secrets.SNOWFLAKE_REGION }}", user_name = "${{ secrets.SF_TF_USER_NAME }}, user_password = ${{ secrets.SF_TF_USER_PASSWORD }}" }'
         TF_VAR_snowflake_dbt_user_info : '{ user_name = ${{ secrets.SNOWFLAKE_ACCOUNT }}, user_password = ${{ secrets.SF_DBT_USER_PASSWORD }} }'
 
     - name: Plan output
