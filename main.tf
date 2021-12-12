@@ -103,11 +103,11 @@ resource "snowflake_schema" "schema" {
   depends_on          = [snowflake_database.db]
 }
 resource "snowflake_schema_grant" "grant" {
-  provider            = snowflake.security_admin
-  for_each            = toset(var.databases)
-  database_name       = upper(each.key)
-  privilege           = "USAGE"
-  roles               = [for k, v in var.roles : upper(v.name)]
-  on_future           = true
-  depends_on          = [snowflake_schema.schema]
+  provider      = snowflake.security_admin
+  for_each      = toset(var.databases)
+  database_name = upper(each.key)
+  privilege     = "USAGE"
+  roles         = [for k, v in var.roles : upper(v.name)]
+  on_future     = true
+  depends_on    = [snowflake_schema.schema]
 }
