@@ -9,18 +9,18 @@ terraform {
 
 # Init sys_admin, security_admin object
 provider "snowflake" {
-  username = var.sf_tf_user_name
-  password = var.sf_tf_user_password
-  account  = var.snowflake_account
-  region   = var.snowflake_region
+  username = var.snowflake_tenant_info.user_name
+  password = var.snowflake_tenant_info.user_password
+  account  = var.snowflake_tenant_info.account_name
+  region   = var.snowflake_tenant_info.region
   alias    = "sys_admin"
   role     = "SYSADMIN"
 }
 provider "snowflake" {
-  username = var.sf_tf_user_name
-  password = var.sf_tf_user_password
-  account  = var.snowflake_account
-  region   = var.snowflake_region
+  username = var.snowflake_tenant_info.user_name
+  password = var.snowflake_tenant_info.user_password
+  account  = var.snowflake_tenant_info.account_name
+  region   = var.snowflake_tenant_info.region
   alias    = "security_admin"
   role     = "SECURITYADMIN"
 }
@@ -29,9 +29,9 @@ provider "snowflake" {
 resource "snowflake_user" "user" {
   provider     = snowflake.security_admin
   name         = "dbt technical user"
-  login_name   = var.sf_dbt_user_name
+  login_name   = var.snowflake_dbt_user_info.user_name
   comment      = "dbt project technical user"
-  password     = var.sf_dbt_user_password
+  password     = var.snowflake_dbt_user_info.user_password
   disabled     = false
   display_name = "dbt technical user"
 }
@@ -88,4 +88,16 @@ resource "snowflake_warehouse_grant" "grant" {
   roles             = [upper(each.value.role)]
   with_grant_option = false
   depends_on        = [snowflake_warehouse.warehouses]
+}
+
+resource "snowflake_schema" "schema" {
+  provider            = snowflake.sys_admin
+  for_each            = toset(var.databases)
+  database            = upper(each.key)
+  name                = upper(var.schema.name)
+  comment             = upper(var.schema.comment)
+  is_transient        = false
+  is_managed          = false
+  data_retention_days = 1
+  depends_on          = [snowflake_database.db]
 }

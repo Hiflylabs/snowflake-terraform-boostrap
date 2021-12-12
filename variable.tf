@@ -1,32 +1,23 @@
-variable "snowflake_account" {
-  type      = string
-  sensitive = true
-}
-variable "snowflake_region" {
-  type      = string
-  sensitive = true
-}
-# This user is used to create the snowflake object, sys_admin/account_admin roles are required
-variable "sf_tf_user_name" {
-  type      = string
-  sensitive = true
-}
-variable "sf_tf_user_password" {
-  type      = string
-  sensitive = true
-}
-# DBT cloud user name
-variable "sf_dbt_user_name" {
-  type      = string
-  sensitive = true
-  default   = "dbt2"
-}
-# DBT cloud user password
-variable "sf_dbt_user_password" {
-  type      = string
+variable "snowflake_tenant_info" {
+  type = object({
+    account_name = string,
+    region       = string,
+    # This user is used to create the snowflake object,
+    # sys_admin/account_admin roles are required
+    user_name     = string,
+    user_password = string
+  })
   sensitive = true
 }
 
+# DBT cloud user 
+variable "snowflake_dbt_user_info" {
+  type = object({
+    user_name     = string,
+    user_password = string
+  })
+  sensitive = true
+}
 variable "warehouses" {
   type = map(object({
     name = string,
@@ -73,9 +64,18 @@ variable "roles" {
   }
 }
 
-
-
 variable "databases" {
   type    = list(string)
-  default = ["TF_ANALYTICS", "TF_ANALYTICS_STAGE"]
+  default = ["TF_ANALYTICS", "TF_ANALYTICS_STAGE", "TF_ANALYTICS_DEV"]
+}
+
+variable "schema" {
+  type = object({
+    name    = string,
+    comment = string
+  })
+  default = {
+    name    = "log",
+    comment = "Log"
+  }
 }

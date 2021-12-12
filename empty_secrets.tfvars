@@ -1,5 +1,6 @@
-snowflake_account    = ""
-snowflake_region     = ""
-sf_tf_user_name      = ""
-sf_tf_user_password  = ""
-sf_dbt_user_password = ""
+snowflake_tenant_info = { account_name = "",
+  region    = "",
+  user_name = "",
+user_password = "" }
+snowflake_dbt_user_info = { user_name = "",
+user_password = "" }
