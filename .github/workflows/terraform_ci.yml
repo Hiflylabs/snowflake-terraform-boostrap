@@ -1,0 +1,42 @@
+name: Terraform
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  terraform-actions:
+    name: Workflow
+    runs-on: ubuntu-latest
+    steps:
+
+    - name: Checkout Repository
+      uses: actions/checkout@master
+
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v1
+      with:
+        terraform_version: 0.14.10
+
+    - name: Terraform Fmt
+      id: fmt
+      run: terraform fmt -check -diff
+      continue-on-error: true
+
+    - name: Terraform Init
+      id: init
+      run: terraform init
+      continue-on-error: true
+
+    - name: Terraform Validate
+      id: validate
+      run: terraform validate -no-color
+      continue-on-error: true
+    
+    - name: Terraform Plan
+      id: plan
+      run: terraform plan -no-color
+      continue-on-error: false
+      env:
+        TF_VAR_snowflake_tenant_info : '{ account_name = "${{ secrets.SNOWFLAKE_ACCOUNT }}", region = "${{ secrets.SNOWFLAKE_REGION }}", user_name = "${{ secrets.SF_TF_USER_NAME }}", user_password = "${{ secrets.SF_TF_USER_PASSWORD }}" }'
+        TF_VAR_snowflake_dbt_user_info : '{ user_name = "dbt2", user_password = "${{ secrets.SF_DBT_USER_PASSWORD }}" }'
